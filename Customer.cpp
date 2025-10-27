@@ -56,7 +56,7 @@ string Customer::getEmail() const {
 }
 
 void Customer::PrintInfo(){
-    cout << setw(10) << left << "Customer: " << fName << " " << lName << setw(10) << left << endl;
+    cout << setw(10) << left << "Customer: " << fName << " " << lName << endl;
     cout << setw(10) << left << "Address: " << address << endl;
     cout << setw(10) << left << "Phone: " << phone << endl;
     cout << setw(10) << left << "Email: " << email << endl;
