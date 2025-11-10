@@ -10,14 +10,14 @@ class Customer {
     string fName, lName, address, phone, email;
 public:
     Customer();
-    Customer(string, string, string, string, string);
+    Customer(const string&, const string&, const string&, const string&, const string&);
     
-    void setFname(string);
-    void setLname(string);
-    void setAddress(string);
-    void setPhone (string);
-    void setEmail(string);
-    void setAll(string, string, string, string, string);
+    void setFname(const string&);
+    void setLname(const string&);
+    void setAddress(const string&);
+    void setPhone (const string&);
+    void setEmail(const string&);
+    void setAll(const string&, const string&, const string&, const string&, const string&);
     
     string getFname() const;
     string getLname() const;
@@ -25,7 +25,7 @@ public:
     string getPhone() const;
     string getEmail() const;
     
-    void PrintInfo();
+    virtual void PrintInfo() const;
 };
 
 

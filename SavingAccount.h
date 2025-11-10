@@ -6,15 +6,16 @@
 class SavingAccount:public Account{
     double interestRate;
 public:
+    SavingAccount();
+    SavingAccount(int, double, Customer *, double);
+    
     void setInterestRate(double);
     void setAll(int, double, Customer *, double);
     
     double getInterestRate() const;
     
-    SavingAccount();
-    SavingAccount(int, double, Customer *, double);
-    
-    
+    void payInterest();
+    void transfer(double, SavingAccount *);
 };
 
 

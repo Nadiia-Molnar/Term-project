@@ -1,5 +1,6 @@
 #include "Customer.h"
 
+// Default constructor
 Customer::Customer(){
     fName = "";
     lName = "";
@@ -7,38 +8,39 @@ Customer::Customer(){
     phone = "";
     email = "";
 }
-
-Customer::Customer(string _fName, string _lName, string _address, string _phone, string _email){
+// Parameterized constructor
+Customer::Customer(const string & _fName, const string & _lName, const string & _address, const string & _phone, const string & _email){
     fName = _fName;
     lName = _lName;
     address = _address;
     phone = _phone;
     email = _email;
 }
-
-void Customer::setFname(string _fName){
+// Setters
+void Customer::setFname(const string & _fName){
     fName = _fName;
 }
-void Customer::setLname(string _lName){
+void Customer::setLname(const string & _lName){
     lName = _lName;
 }
-void Customer::setAddress(string _address){
+void Customer::setAddress(const string & _address){
     address = _address;
 }
-void Customer::setPhone(string _phone){
+void Customer::setPhone(const string & _phone){
     phone = _phone;
 }
-void Customer::setEmail(string _email){
+void Customer::setEmail(const string & _email){
     email = _email;
 }
-void Customer::setAll(string _fName, string _lName, string _address, string _phone, string _email){
-    fName = _fName;
-    lName = _lName;
-    address = _address;
-    phone = _phone;
-    email = _email;
+// Sets all attributes at once
+void Customer::setAll(const string & _fName, const string & _lName, const string & _address, const string & _phone, const string & _email){
+    setFname(_fName);
+    setLname(_lName);
+    setAddress(_address);
+    setPhone(_phone);
+    setEmail(_email);
 }
-
+// Getters 
 string Customer::getFname() const {
     return fName;
 }
@@ -54,10 +56,13 @@ string Customer::getPhone() const {
 string Customer::getEmail() const {
     return email;
 }
-
-void Customer::PrintInfo(){
-    cout << setw(10) << left << "Customer: " << fName << " " << lName << endl;
-    cout << setw(10) << left << "Address: " << address << endl;
-    cout << setw(10) << left << "Phone: " << phone << endl;
-    cout << setw(10) << left << "Email: " << email << endl;
+// Prints all customer information
+void Customer::PrintInfo() const {
+    if(fName != ""){
+        cout << "------------------------" << endl;
+        cout << setw(10) << left << "Customer: " << fName << " " << lName << endl;
+        cout << setw(10) << left << "Address: " << address << endl;
+        cout << setw(10) << left << "Phone: " << phone << endl;
+        cout << setw(10) << left << "Email: " << email << endl;
+    }
 }

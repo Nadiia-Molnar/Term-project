@@ -14,7 +14,7 @@ public:
     
     double getOverDraftLimit() const;
     
-    void WithdrawMoney(double);
+    virtual void WithdrawMoney(const double&);
 };
 
 

@@ -1,55 +1,58 @@
 #include "Account.h"
 
-int Account::withdrawalCounter = 0;
-int Account::depositsCounter = 0;
-
+// Default constructor
 Account::Account(){
     ID = 0;
     balance = 0.0;
-    accountCustomer = 0; // check if it works
+    accountCustomer = nullptr;
+    withdrawalCounter = 0;
+    depositsCounter = 0;
 }
-
+// Parameterized constructor
 Account::Account(int _id, double _balance, Customer * _accountCustomer){
-    if (_id > 0)
-        ID = _id;
-    else
-        ID = 0;
-    if (_balance > 0.0)
-        balance = _balance;
-    else
-        balance = 0.0;
+    setID(_id);
+    setBalance(_balance);
     accountCustomer = _accountCustomer;
+    withdrawalCounter = 0;
+    depositsCounter = 0;
 }
-
+//Setters
 void Account::setID (int _id){
-    if (_id > 0)
+    if (_id > 0)  //Ensures positive ID
         ID = _id;
-    else
+    else{
         ID = 0;
+        cout << "Warning! Invalid ID. Default value 0 used." << endl;
+    }
 }
 void Account::setBalance(double _balance){
-    if (_balance > 0.0)
+    if (_balance >= 0.0)  //Ensures non-negative balance
         balance = _balance;
-    else
+    else{
         balance = 0.0;
+        cout << "Warning! Invalid balance. Set to 0." << endl;
+    }
 }
 void Account::setAccountCustomer(Customer * _accountCustomer){
     accountCustomer = _accountCustomer;
 }
-void Account::setWithdrawalCounter(int _withdrawalCounter){
-    if (_withdrawalCounter > 0)
+void Account::setWithdrawalCounter(int _withdrawalCounter) {
+    if (_withdrawalCounter >= 0)  //Ensures non-negative
         withdrawalCounter = _withdrawalCounter;
 }
 void Account::setDepositCounter(int _depositCounter){
-    if (_depositCounter > 0)
+    if (_depositCounter >= 0)  //Ensures non-negative
         depositsCounter = _depositCounter;
 }
+// Sets all attributes at once
 void Account::setAll(int _id, double _balance, Customer * _accountCustomer){
     setID(_id);
     setBalance(_balance);
     accountCustomer = _accountCustomer;
+    withdrawalCounter = 0;
+    depositsCounter = 0;
 }
-
+// Getters
 int Account::getID() const {
     return ID;
 }
@@ -59,37 +62,51 @@ double Account::getBalance() const {
 Customer * Account::getAccountCustomer() const {
     return accountCustomer;
 }
-int Account::getWithdrawalCounter() {
+int Account::getWithdrawalCounter() const{
     return withdrawalCounter;
 }
-int Account::getDepositsCounter() {
+int Account::getDepositsCounter() const{
     return depositsCounter;
 }
-
-void Account::DepositMoney(double & _amount) {
+// Deposit Money Function
+void Account::DepositMoney(const double & _amount){
     if (_amount > 0.0){
         balance = balance + _amount;
-        depositsCounter = depositsCounter + 1;
+        depositsCounter++;
+        cout << fixed << setprecision(2); // show 2 decimal places for money
+        cout << "Deposit successful. New balance: $" << balance << endl;
+    }
+    else{
+        cout << "Error! Deposit amount must be positive." << endl;
     }
 }
-void Account::WithdrawMoney(double & _amount) {
-    if (_amount < 0.0){
-        cout << "Error: Amount must be positive." << endl;
+// Withdraw Money Function
+void Account::WithdrawMoney(const double & _amount) {
+    if (_amount <= 0.0){
+        cout << "Error! Amount must be positive." << endl;
         return;
     }
-    if (_amount > balance){
-        cout << "Error: Insufficient funds." << endl;
+    else if (_amount > balance){
+        cout << "Error! Insufficient funds." << endl;
         return;
     }
-        
-    balance = balance - _amount;
-    withdrawalCounter = withdrawalCounter + 1;
-    cout << "Withdrawal successful. New balance: " << balance << endl;
-}
-void Account::PrintInfo(){
-    cout << setw(10) << left << "Account ID: " << ID << endl;
-    cout << setw(10) << left << "Balance: " << balance << endl;
-    if (accountCustomer != 0) {
-        accountCustomer->PrintInfo();
+    else{
+        balance = balance - _amount;
+        withdrawalCounter++;
+        cout << "Withdrawal successful. New balance: " << balance << endl;
     }
 }
+//Displays all account information
+void Account::PrintInfo() const{
+    if(ID != 0){
+        cout << fixed << setprecision(2); // ensure balance shows two decimals
+        cout << setw(10) << left << "Account ID: " << ID << endl;
+        cout << setw(10) << left << "Balance: " << balance << endl;
+        cout << setw(10) << left << "Withdrawals: " << withdrawalCounter << endl;
+        cout << setw(10) << left << "Deposits: " << depositsCounter << endl;
+        if (accountCustomer != nullptr) {
+            accountCustomer->PrintInfo();
+        }
+    }
+}
+
