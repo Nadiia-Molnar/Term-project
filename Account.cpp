@@ -18,7 +18,7 @@ Account::Account(int _id, double _balance, Customer * _accountCustomer){
 }
 //Setters
 void Account::setID (int _id){
-    if (_id > 0)  //Ensures positive ID
+    if (_id > 0)
         ID = _id;
     else{
         ID = 0;
@@ -26,7 +26,7 @@ void Account::setID (int _id){
     }
 }
 void Account::setBalance(double _balance){
-    if (_balance >= 0.0)  //Ensures non-negative balance
+    if (_balance >= 0.0)
         balance = _balance;
     else{
         balance = 0.0;
@@ -37,11 +37,11 @@ void Account::setAccountCustomer(Customer * _accountCustomer){
     accountCustomer = _accountCustomer;
 }
 void Account::setWithdrawalCounter(int _withdrawalCounter) {
-    if (_withdrawalCounter >= 0)  //Ensures non-negative
+    if (_withdrawalCounter >= 0)
         withdrawalCounter = _withdrawalCounter;
 }
 void Account::setDepositCounter(int _depositCounter){
-    if (_depositCounter >= 0)  //Ensures non-negative
+    if (_depositCounter >= 0)
         depositsCounter = _depositCounter;
 }
 // Sets all attributes at once
@@ -73,7 +73,7 @@ void Account::DepositMoney(const double & _amount){
     if (_amount > 0.0){
         balance = balance + _amount;
         depositsCounter++;
-        cout << fixed << setprecision(2); // show 2 decimal places for money
+        cout << fixed << setprecision(2); 
         cout << "Deposit successful. New balance: $" << balance << endl;
     }
     else{
