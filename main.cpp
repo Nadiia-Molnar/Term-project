@@ -5,7 +5,7 @@
 
 //Function prototypes
 void menu();
-int existingCustomer();
+int existingCustomer(bool);
 int createNewCustomer(string, string, string);
 void createCheckingAccount();
 void createSavingAccount();
@@ -49,173 +49,21 @@ int main()
         switch(opt){
             //Create checking account
             case 1: {
-                cout << endl;
-                cout << "=============================" << endl;
-                cout << "Do you have an account(Y or N)?: " ;
-                cin >> ans;
-                while(cin.fail()){
-                    cin.clear();
-                    cin.ignore(1000, '\n');
-                    cout << "Bad data, try again." << endl;
-                    cout << "Do you have an account(Enter Y for yes or N for no)?: ";
-                    cin >> ans;
-                }
-                
-                if (ans == 'Y' || ans == 'y'){
-                    //Check if customer already exists
-                    int customerIndex = existingCustomer();
-                    
-                    if (customerIndex == -1){
-                        cout << "Customer not found. Please create a new account first." << endl;
-                        break;
-                    }
-                    
-                    int checkingAccountIndex = getCheckingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
-                    
-                    //If the customer already has a checking account
-                    if (checkingAccountIndex != -1) {
-                        cout << "There is an existing checking account with the following information.\n" << endl;
-                        cout << "=============================" << endl;
-                        checkingAccount[checkingAccountIndex].PrintInfo();
-                    }
-                    else{
-                        int emptyCheckingAccountIndex = getNextEmptyCheckingAccountIndex();
-                        //Create a new checking account
-                        double firstDeposit, limit;
-                        checkingAccount[emptyCheckingAccountIndex].setAccountCustomer1(&customerList[customerIndex]);
-                        
-                        //Deposit setup
-                        cout << "Enter your first deposit amount: ";
-                        cin >> firstDeposit;
-                        while(cin.fail() || firstDeposit <= 0){
-                            cin.clear();
-                            cin.ignore(1000, '\n');
-                            cout << "Bad data, try again." << endl;
-                            cout << "The amount must be positive number. Try again: ";
-                            cin >> firstDeposit;
-                        }
-                        checkingAccount[emptyCheckingAccountIndex].setBalance(firstDeposit);
-                        
-                        //Overdraft limit setup
-                        cout << "Enter overdraft limit for this checking account: ";
-                        cin >> limit;
-                        while(cin.fail() || limit<0){
-                            cin.clear();
-                            cin.ignore(1000, '\n');
-                            cout << "Bad data, try again." << endl;
-                            cout << "Overdraft limit must be positive number. Try again: ";
-                            cin >> limit;
-                        }
-                        checkingAccount[emptyCheckingAccountIndex].setOverDraftLimit(limit);
-                        
-                        cout << "New checking account created successfully for " << customerList[customerIndex].getFname() << " " << customerList[customerIndex].getLname() << "!\n" << endl;
-                        cout << "=============================" << endl;
-                        checkingAccount[emptyCheckingAccountIndex].PrintInfo();
-                    }
-                }
-                else if (ans == 'N' || ans == 'n'){
-                    //Create a new checking account
-                    createCheckingAccount();
-                }
-                else{
-                    //If the user enters something other than y or n
-                    cout << "Error. Bad data." << endl;
-                }
+//                cout << endl;
+//                cout << "=============================" << endl;
+                createCheckingAccount();
                 break;
             }
             //Create a saving account
             case 2: {
-                cout << endl;
-                cout << "=============================" << endl;
-                cout << "Do you have an account(Y or N)?: " ;
-                cin >> ans;
-                while(cin.fail()){
-                    cin.clear();
-                    cin.ignore(1000, '\n');
-                    cout << "Bad data, try again." << endl;
-                    cout << "Do you have an account(Enter Y for yes or N for no)?: ";
-                    cin >> ans;
-                }
-                
-                //Customer already exists in the system
-                if (ans == 'Y' || ans == 'y')
-                {
-                    int customerIndex = existingCustomer(); //Find customer record
-                    
-                    //Customer not found
-                    if (customerIndex == -1){
-                        cout << "Customer not found. Please create a new account first." << endl;
-                        break;
-                    }
-                    //Customer already has a saving account
-                    else if (savingAccount[customerIndex].getInterestRate() != 0.0) {
-                        cout << "There is an existing saving account with the following information." << endl;
-                        cout << "=============================" << endl;
-                        savingAccount[customerIndex].PrintInfo();
-                    }
-                    //Customer has a checking account but no saving account yet
-                    else if(savingAccount[customerIndex].getInterestRate() == 0.0 && checkingAccount[checkingAccountIndex].getOverDraftLimit() != 0.0){
-                        cout << "You alredy have a cheking account with us." << endl;
-                        cout << "Do you want to connect these accounts(Enter Y for yes or N for no)?: ";
-                        cin >> ans;
-                        while(cin.fail()){
-                            cin.clear();
-                            cin.ignore(1000, '\n');
-                            cout << "Bad data, try again." << endl;
-                            cout << "Do you want to connect these accounts(Enter Y for yes or N for no)?: ";
-                            cin >> ans;
-                        }
-                        
-                        //Connect the new saving account to the existing checking account
-                        if(ans=='Y' || ans=='y'){
-                            double firstDeposit, rate;
-                            
-                            //Link this saving account to the existing customer
-                            savingAccount[customerIndex].setAccountCustomer1(&customerList[customerIndex]);
-                            
-                            cout << "Enter initial deposit: ";
-                            cin >> firstDeposit;
-                            while(cin.fail() || firstDeposit <= 0){
-                                cin.clear();
-                                cin.ignore(1000, '\n');
-                                cout << "Bad data, try again." << endl;
-                                cout << "The amount must be positive number. Try again: ";
-                                cin >> firstDeposit;
-                            }
-                            savingAccount[customerIndex].setBalance(firstDeposit); //do i have to use balance + firstDeposi because we do not know if there is some money on the account or do we have to make it a pointer
-                            
-                            cout << "Enter interest rate: ";
-                            cin >> rate;
-                            while(cin.fail() || rate <= 0){
-                                cin.clear();
-                                cin.ignore(1000, '\n');
-                                cout << "Bad data, try again." << endl;
-                                cout << "The interest rate must be positive number. Try again: ";
-                                cin >> rate;
-                            }
-                            savingAccount[customerIndex].setInterestRate(rate);
-                            
-                            // Confirmation message
-                            cout << "New saving account created successfully for " << customerList[customerIndex].getFname() << " " << customerList[customerIndex].getLname() << "!\n" << endl;
-                            cout << "=============================" << endl;
-                            savingAccount[customerIndex].PrintInfo();
-                        }
-                        else{
-                            //User chose not to connect accounts
-                            cout << "No saving account was created.\n" << endl;
-                        }
-                    }
-                }
-                //Customer does not have an account yet
-                else{
-                    //Create a completely new customer and saving account
-                    createSavingAccount();
-                }
+//                cout << endl;
+//                cout << "=============================" << endl;
+                createSavingAccount();
                 break;
             }
             //View account info
             case 3: {
-                int customerIndex = existingCustomer();
+                int customerIndex = existingCustomer(false);
                 viewInfo(customerIndex);
             }
             //Modify or delete the account
@@ -331,15 +179,13 @@ int createNewCustomer(string _fName, string _lName, string _phone){
     
     return index;
 }
+
 //Function: Creates a new checking account for a customer
 void createCheckingAccount(){
-    //Declare local variables for customer and account data
-//    string _fName, _lName, _address, _phone, _email;
-//    bool newCheckingAccount = false;
-
+    // Check if customer exist
     int customerIndex = existingCustomer(true);
     
-    //Customer already has a checking account
+    //If customer already has a checking account
     int CAIndex = getCheckingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
     if(CAIndex != -1){
         cout << "There is an existing checking account with the following information.\n" << endl;
@@ -349,7 +195,7 @@ void createCheckingAccount(){
     }
     
     // Customer already exists and has a saving account but no checking account
-     if(getSavingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname()) != -1){
+    if(getSavingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname()) != -1){
         char ans;
         cout << "You alredy have a saving account with us." << endl;
         cout << "Do you still want to create a new checking account(Enter Y for yes or N for no)?: ";
@@ -361,7 +207,7 @@ void createCheckingAccount(){
             cout << "Do you still want to create a new checking account(Enter Y for yes or N for no)?: ";
             cin >> ans;
         }
-
+        
         // Exit to main menu
         if(ans != 'Y' && ans != 'y'){
             cout << "No checking account was created.\n" << endl;
@@ -403,144 +249,78 @@ void createCheckingAccount(){
     }
     checkingAccount[nextCAIndex].setOverDraftLimit(limit);
     
-    //Confirm account creation
-//    newCheckingAccount = true;
     cout << "New checking account created successfully for " << customerList[customerIndex].getFname() << " " << customerList[customerIndex].getLname() << "!\n" << endl;
     cout << "=============================" << endl;
     checkingAccount[nextCAIndex].PrintInfo();
-            
-
-//    //If there is no empty space to create new accounts
-//    if (!newCheckingAccount){
-//        cout << "No available space to create a new checking account." << endl;
-//        cout << endl;
-//    }
 }
 
 //Function: Creates a new saving account for a customer
 void createSavingAccount(){
-    string _fName, _lName, _address, _phone, _email;
-    double firstDeposit, rate;
-    bool created = false; //Flag to check if account was successfully created
-    char ans;
-    int customerIndex = existingCustomer();
+//    string _fName, _lName, _address, _phone, _email;
+//    double firstDeposit, rate;
+//    bool created = false; //Flag to check if account was successfully created
+    int customerIndex = existingCustomer(true);
     
-    //Customer does not exist
-    if(customerIndex == -1){
-        for (int i = 0; i < NUM_OF_ACCOUNT; i++){
-            //Find the first empty slot in the array
-            if (savingAccount[i].getID() == 0) {
-                cout << "Enter email: ";
-                cin >> _email;
-                cout << "Enter address: ";
-                cin.ignore();
-                getline(cin, _address);
-                
-                // Store customer information in the array
-                customerList[i].setAll(_fName, _lName, _address, _phone, _email);
-                savingAccount[i].setAccountCustomer1(&customerList[i]);
-                
-                //Generate unique ID
-                int newID = ID_COUNTER + 1;
-                ID_COUNTER++;
-                checkingAccount[i].setID(newID);
-                
-                cout << "Enter initial deposit: ";
-                cin >> firstDeposit;
-                while(cin.fail() || firstDeposit <= 0){
-                    cin.clear();
-                    cin.ignore(1000, '\n');
-                    cout << "Bad data, try again." << endl;
-                    cout << "The amount must be positive number. Try again: ";
-                    cin >> firstDeposit;
-                }
-                savingAccount[i].setBalance(firstDeposit);
-                
-                cout << "Enter interest rate (%): ";
-                cin >> rate;
-                while(cin.fail() || rate <= 0){
-                    cin.clear();
-                    cin.ignore(1000, '\n');
-                    cout << "Bad data, try again." << endl;
-                    cout << "The interest rate must be positive number. Try again: ";
-                    cin >> rate;
-                }
-                savingAccount[i].setInterestRate(rate);
-                
-                //Confirm successful creation
-                cout << "New saving account created successfully for " << customerList[customerIndex].getFname() << " " << customerList[customerIndex].getLname() << "!\n" << endl;
-                cout << "=============================" << endl;
-                savingAccount[customerIndex].PrintInfo();
-                created = true;
-                break;
-            }
-        }
+    //If customer alresdy has a saving account
+    int SAIndex = getSavingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
+    if (SAIndex != -1){
+        cout << "There is an existing saving account with the following information.\n" << endl;
+        cout << "=============================" << endl;
+        savingAccount[SAIndex].PrintInfo();
+        return;
     }
-    //Customer has a checking account but no saving account
-    else if(checkingAccount[checkingAccountIndex].getID() != 0 && savingAccount[customerIndex].getInterestRate() == 0.0){
+        //Customer has a checking account but no saving account
+    if(getCheckingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname()) != -1){
+        char ans;
         cout << "You alredy have a checking account with us." << endl;
-        cout << "Do you want to connect these accounts(Enter Y for yes or N for no)?: ";
+        cout << "Do you want to still want to create a new saving account(Enter Y for yes or N for no)?: ";
         cin >> ans;
         while(cin.fail()){
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "Bad data, try again." << endl;
-            cout << "Do you want to connect these accounts(Enter Y for yes or N for no)?: ";
+            cout << "Do you want to still want to create a new saving account(Enter Y for yes or N for no)?: ";
             cin >> ans;
         }
         
-        //If user wants to connect
-        if(ans=='Y' || ans=='y'){
-            double firstDeposit, rate;
-            savingAccount[customerIndex].setAccountCustomer1(&customerList[customerIndex]);
-        
-            cout << "Enter initial deposit: ";
-            cin >> firstDeposit;
-            while(cin.fail() || firstDeposit <= 0){
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "Bad data, try again." << endl;
-                cout << "The amount must be positive number. Try again: ";
-                cin >> firstDeposit;
-            }
-            savingAccount[customerIndex].setBalance(firstDeposit);
-            
-            cout << "Enter interest rate: ";
-            cin >> rate;
-            while(cin.fail() || rate <= 0){
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "Bad data, try again." << endl;
-                cout << "The interest rate must be positive number. Try again: ";
-                cin >> rate;
-            }
-            savingAccount[customerIndex].setInterestRate(rate);
-            
-            //Confirm successful creation
-            cout << "New saving account created successfully for " << customerList[customerIndex].getFname() << " " << customerList[customerIndex].getLname() << "!\n" << endl;
-            cout << "=============================" << endl;
-            savingAccount[customerIndex].PrintInfo();
-            created = true;
-        }
-        else{
-            //User chose not to connect
+        //Exit to the main
+        if(ans!='Y' || ans!='y'){
             cout << "No saving account was created.\n" << endl;
             return;
         }
     }
-    else if (savingAccount[customerIndex].getID() != 0){
-        //If customer already has a saving account
-        cout << "There is an existing saving account with the following information.\n" << endl;
-        cout << "=============================" << endl;
-        savingAccount[customerIndex].PrintInfo();
-        created = true;
-        return;
-    }
+            
+    int nextSAIndex = getNextEmptySavingAccountIndex();
+    double firstDeposit, rate;
     
-    //If no account was created due to capacity limit
-    if (!created){
-        cout << "No available space to create new saving account!" << endl;
+    savingAccount[nextSAIndex].setAccountCustomer1(&customerList[customerIndex]);
+    
+    cout << "Enter initial deposit: ";
+    cin >> firstDeposit;
+    while(cin.fail() || firstDeposit <= 0){
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Bad data, try again." << endl;
+        cout << "The amount must be positive number. Try again: ";
+        cin >> firstDeposit;
     }
+    savingAccount[nextSAIndex].setBalance(firstDeposit);
+    
+    cout << "Enter interest rate: ";
+    cin >> rate;
+    while(cin.fail() || rate <= 0){
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Bad data, try again." << endl;
+        cout << "The interest rate must be positive number. Try again: ";
+        cin >> rate;
+    }
+    savingAccount[nextSAIndex].setInterestRate(rate);
+    
+    //Confirm successful creation
+    cout << "New saving account created successfully for " << customerList[customerIndex].getFname() << " " << customerList[customerIndex].getLname() << "!\n" << endl;
+    cout << "=============================" << endl;
+    savingAccount[nextSAIndex].PrintInfo();
 }
 
 //Function: Display all information about a customer
@@ -556,27 +336,29 @@ void viewInfo(int index){
     cout << "=============================================" << endl;
     cout << setw(15) << left << "Field" << setw(30) << left << "Information" << endl;
     cout << "---------------------------------------------" << endl;
-    cout << setw(15) << left << "Name" << setw(30) << left << customerList[index].getFname() + " " + customerList[index].getLname() << endl;
+    cout << setw(15) << left << "Name" << setw(30) << left << customerList[index].getFname() << " " << customerList[index].getLname() << endl;
     cout << setw(15) << left << "Phone" << setw(30) << left << customerList[index].getPhone() << endl;
     cout << setw(15) << left << "Email" << setw(30) << left << customerList[index].getEmail() << endl;
     cout << setw(15) << left << "Address" << setw(30) << left << customerList[index].getAddress() << endl;
     
     // Checking Account info
-    if (checkingAccount[index].getID() != 0){
+    int CAIndex = getCheckingAccountIndex(customerList[index].getPhone(), customerList[index].getLname());
+    if (checkingAccount[CAIndex].getID() != 0){
         cout << endl;
         cout << "Checking Account:" << endl;
-        cout << setw(15) << left << "Account ID" << setw(30) << left << checkingAccount[index].getID() << endl;
-        cout << setw(15) << left << "Balance" << setw(30) << left << checkingAccount[index].getBalance() << endl;
-        cout << setw(15) << left << "Overdraft" << setw(30) << left << checkingAccount[index].getOverDraftLimit() << endl;
+        cout << setw(15) << left << "Account ID" << setw(30) << left << checkingAccount[CAIndex].getID() << endl;
+        cout << setw(15) << left << "Balance" << setw(30) << left << checkingAccount[CAIndex].getBalance() << endl;
+        cout << setw(15) << left << "Overdraft" << setw(30) << left << checkingAccount[CAIndex].getOverDraftLimit() << endl;
     }
     
     // Saving Account info
-    if (savingAccount[index].getID() != 0){
+    int SAIndex = getSavingAccountIndex(customerList[index].getPhone(), customerList[index].getLname());
+    if (savingAccount[SAIndex].getID() != 0){
         cout << endl;
         cout << "Saving Account:" << endl;
-        cout << setw(15) << left << "Account ID" << setw(30) << left << savingAccount[index].getID() << endl;
-        cout << setw(15) << left << "Balance" << setw(30) << left << savingAccount[index].getBalance() << endl;
-        cout << setw(15) << left << "Interest Rate" << setw(30) << left << savingAccount[index].getInterestRate() << endl;
+        cout << setw(15) << left << "Account ID" << setw(30) << left << savingAccount[SAIndex].getID() << endl;
+        cout << setw(15) << left << "Balance" << setw(30) << left << savingAccount[SAIndex].getBalance() << endl;
+        cout << setw(15) << left << "Interest Rate" << setw(30) << left << savingAccount[SAIndex].getInterestRate() << endl;
     }
     
     cout << "=============================" << endl;
@@ -585,96 +367,105 @@ void viewInfo(int index){
 //Function: Deletes an account
 void deleteAccount(){
     char ans;
-    int customerIndex = existingCustomer(); //Find the index of the existing customer
+    int customerIndex = existingCustomer(false); //Find the index of the existing customer
 
     //If customer does not exist
     if (customerIndex == -1) {
         cout << "Customer not found." << endl;
         return;
     }
-    else{
-        //Delete checking account
-        if(checkingAccount[checkingAccountIndex].getOverDraftLimit()!=0.0){
+    
+    //Delete checking account
+    int CAIndex = getCheckingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
+    if(CAIndex != -1){
+        cout << "Do you want to delete the checking account(Enter Y for yes or N for no)?: ";
+        cin >> ans;
+        while(cin.fail()){
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Bad data, try again." << endl;
             cout << "Do you want to delete the checking account(Enter Y for yes or N for no)?: ";
             cin >> ans;
-            while(cin.fail()){
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "Bad data, try again." << endl;
-                cout << "Do you want to delete the checking account(Enter Y for yes or N for no)?: ";
-                cin >> ans;
+        }
+        
+        //If user confirms deletion, reset checking account data
+        if (ans == 'Y' || ans == 'y'){
+            if(checkingAccount[CAIndex].getBalance() < 0){
+                cout << "You cannot delete this account because it has an outstanding overdraft balance. Please pay off your debt before closing the account." << endl;
             }
-            
-            //If user confirms deletion, reset checking account data
-            if (ans == 'Y' || ans == 'y'){
-                checkingAccount[checkingAccountIndex].setID(0);
-                checkingAccount[checkingAccountIndex].setBalance(0.0);
-                checkingAccount[checkingAccountIndex].setOverDraftLimit(0.0);
-                checkingAccount[checkingAccountIndex].setAccountCustomer1(nullptr);
+            else{
+                checkingAccount[CAIndex].setAll(0, 0.0, nullptr, nullptr, 0.0);
                 cout << "Checking account deleted successfully." << endl;
             }
-            else{
-                cout << "Account deletion canceled. No changes were made." << endl;
-            }
         }
-        //Delete saving account
-        if(savingAccount[customerIndex].getInterestRate() != 0.0){
+        else{
+            cout << "Account deletion canceled. No changes were made." << endl;
+        }
+    }
+    //Delete saving account
+    int SAIndex = getSavingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
+    if(SAIndex != -1){
+        cout << "Do you want to delete the saving account(Enter Y for yes or N for no)?: ";
+        cin >> ans;
+        while(cin.fail()){
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Bad data, try again." << endl;
             cout << "Do you want to delete the saving account(Enter Y for yes or N for no)?: ";
             cin >> ans;
-            while(cin.fail()){
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "Bad data, try again." << endl;
-                cout << "Do you want to delete the saving account(Enter Y for yes or N for no)?: ";
-                cin >> ans;
-            }
-            
-            //If user confirms deletion, reset saving account data
-            if (ans == 'Y' || ans == 'y'){
-                savingAccount[customerIndex].setID(0);
-                savingAccount[customerIndex].setBalance(0.0);
-                savingAccount[customerIndex].setInterestRate(0.0);
-                savingAccount[customerIndex].setAccountCustomer1(nullptr);
-                cout << "Saving account deleted successfully." << endl;
-            }
-            else{
-                cout << "Account deletion canceled. No changes were made." << endl;
-            }
         }
-        //Delete all customer info
-        if(customerList[customerIndex].getFname() != ""){
+        
+        //If user confirms deletion, reset saving account data
+        if (ans == 'Y' || ans == 'y'){
+            savingAccount[SAIndex].setAll(0, 0.0, nullptr, nullptr, 0.0);
+            cout << "Saving account deleted successfully." << endl;
+        }
+        else{
+            cout << "Account deletion canceled. No changes were made." << endl;
+        }
+    }
+    
+    //Delete all customer info
+    cout << "Do you want to delete all your information completely(Enter Y for yes or N for no)?: ";
+    cout << "Your checking and saving accounts will be deleted as well." << endl;
+        cin >> ans;
+        while(cin.fail()){
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Bad data, try again." << endl;
             cout << "Do you want to delete all your information completely(Enter Y for yes or N for no)?: ";
             cin >> ans;
-            while(cin.fail()){
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "Bad data, try again." << endl;
-                cout << "Do you want to delete all your information completely(Enter Y for yes or N for no)?: ";
-                cin >> ans;
+        }
+        
+        //If user confirms deletion, clear all customer data
+        if (ans == 'Y' || ans == 'y'){
+            if(checkingAccount[CAIndex].getBalance() < 0){
+                cout << "You cannot delete this account because it has an outstanding overdraft balance. Please pay off your debt before closing the account." << endl;
             }
-            
-            //If user confirms deletion, clear all customer data
-            if (ans == 'Y' || ans == 'y'){
+            else{
                 customerList[customerIndex].setFname("");
                 customerList[customerIndex].setLname("");
                 customerList[customerIndex].setPhone("");
                 customerList[customerIndex].setEmail("");
                 customerList[customerIndex].setAddress("");
+                
+                
+                checkingAccount[CAIndex].setAll(0, 0.0, nullptr, nullptr, 0.0);
+                savingAccount[SAIndex].setAll(0, 0.0, nullptr, nullptr, 0.0);
+                
                 cout << "Account deleted successfully." << endl;
             }
-            else{
-                cout << "Account deletion canceled. No changes were made." << endl;
-            }
         }
+        else{
+            cout << "Account deletion canceled. No changes were made." << endl;
+        }
+        
     }
-}
 
 //Function: Modifies an account
 void modifyAccount(){
-    int ans;
-    
     // Find the customer
-    int customerIndex = existingCustomer();
+    int customerIndex = existingCustomer(false);
 
     //If customer does not exist
     if (customerIndex == -1) {
@@ -683,6 +474,7 @@ void modifyAccount(){
     }
     
     //Modification menu
+    int ans;
     cout << "What do you want to modify?" << endl;
     cout << "1. Personal information." << endl;
     cout << "2. Checking account details." << endl;
@@ -728,22 +520,12 @@ void modifyAccount(){
         case 2:
         {
             // Check if customer has a checking account
-            if (checkingAccount[checkingAccountIndex].getOverDraftLimit() == 0.0){
+            int CAIndex = getCheckingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
+            if (CAIndex == -1){
                 cout << "No checking account found for this customer." << endl;
             }
             else{
-                double newBalance, newLimit;
-                cout << "Enter new balance: "; //i'm not sure if i have to live it cuz i do not know if the user can change the balance
-                cin >> newBalance;
-                while(cin.fail() || newBalance <= 0){
-                    cin.clear();
-                    cin.ignore(1000, '\n');
-                    cout << "Bad data, try again." << endl;
-                    cout << "The amount must be positive number. Try again: ";
-                    cin >> newBalance;
-                }
-                checkingAccount[checkingAccountIndex].setBalance(newBalance);
-
+                double newLimit;
                 cout << "Enter new overdraft limit: ";
                 cin >> newLimit;
                 while(cin.fail() || newLimit <= 0){
@@ -753,8 +535,7 @@ void modifyAccount(){
                     cout << "Overdraft limit must be positive number. Try again: ";
                     cin >> newLimit;
                 }
-                checkingAccount[checkingAccountIndex].setOverDraftLimit(newLimit);
-
+                checkingAccount[CAIndex].setOverDraftLimit(newLimit);
                 cout << "Checking account updated successfully." << endl;
             }
             break;
@@ -762,23 +543,12 @@ void modifyAccount(){
         // Modify saving account
         case 3:
         {
-            if (savingAccount[customerIndex].getInterestRate() == 0.0){
+            int SAIndex = getSavingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
+            if(SAIndex == -1){
                 cout << "No saving account found for this customer." << endl;
             }
             else{
-                double newBalance, newRate;
-                
-                cout << "Enter new balance: ";
-                cin >> newBalance;
-                while(cin.fail() || newBalance <= 0){
-                    cin.clear();
-                    cin.ignore(1000, '\n');
-                    cout << "Bad data, try again." << endl;
-                    cout << "The amount must be positive number. Try again: ";
-                    cin >> newBalance;
-                }
-                savingAccount[customerIndex].setBalance(newBalance);
-
+                double newRate;
                 cout << "Enter new interest rate: ";
                 cin >> newRate;
                 while(cin.fail() || newRate <= 0){
@@ -788,8 +558,7 @@ void modifyAccount(){
                     cout << "The interest rate must be positive number. Try again: ";
                     cin >> newRate;
                 }
-                savingAccount[customerIndex].setInterestRate(newRate);
-                
+                savingAccount[SAIndex].setInterestRate(newRate);
                 cout << "Saving account updated successfully." << endl;
             }
             break;
@@ -818,18 +587,20 @@ void transferMoney(){
     
     if (ans == 'Y' || ans == 'y'){
         //Existing customer performing transfer between own accounts
-        int customerIndex = existingCustomer();
-        if (customerIndex == -1) {
+        int customerIndex = existingCustomer(false);
+        if (customerIndex == -1){
             cout << "Customer not found." << endl;
             return;
         }
         
         //Check if both accounts exist
-        if (checkingAccount[checkingAccountIndex].getID() == 0) { //make sure it works by id, if it does then change all og them to id
+        int CAIndex = getCheckingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
+        int SAIndex = getSavingAccountIndex(customerList[customerIndex].getPhone(), customerList[customerIndex].getLname());
+        if(CAIndex == -1){
             cout << "Your checking account does not exist." << endl;
             return;
         }
-        else if (savingAccount[customerIndex].getID() == 0) {
+        else if (SAIndex == -1){
             cout << "Your saving account does not exist." << endl;
             return;
         }
@@ -856,9 +627,9 @@ void transferMoney(){
                 cout << "Enter a positive number for the amount to transfer: ";
                 cin >> ans;
             }
-            if (amount > 0 && amount <= checkingAccount[checkingAccountIndex].getBalance()){
-                checkingAccount[checkingAccountIndex].WithdrawMoney(amount);
-                savingAccount[customerIndex].DepositMoney(amount);
+            if (amount > 0 && amount <= checkingAccount[CAIndex].getBalance()){
+                checkingAccount[CAIndex].WithdrawMoney(amount);
+                savingAccount[SAIndex].DepositMoney(amount);
                 cout << "Transfer successful!" << endl;
             }
             else{
@@ -876,9 +647,9 @@ void transferMoney(){
                 cout << "Enter a positive number for the amount to transfer: ";
                 cin >> ans;
             }
-            if (amount > 0 && amount <= savingAccount[customerIndex].getBalance()){
-                savingAccount[customerIndex].WithdrawMoney(amount);
-                checkingAccount[checkingAccountIndex].DepositMoney(amount);
+            if (amount > 0 && amount <= savingAccount[SAIndex].getBalance()){
+                savingAccount[SAIndex].WithdrawMoney(amount);
+                checkingAccount[CAIndex].DepositMoney(amount);
                 cout << "Transfer successful!" << endl;
             }
             else{
@@ -893,14 +664,14 @@ void transferMoney(){
     else{
         //Transfer to another customer
         cout << "Enter your account info: " << endl;
-        int senderIndex = existingCustomer();
+        int senderIndex = existingCustomer(false);
         if (senderIndex == -1) {
             cout << "Sender not found." << endl;
             return;
         }
 
         cout << "Enter recipient's account info: " << endl;
-        int recipientIndex = existingCustomer();
+        int recipientIndex = existingCustomer(false);
         if (recipientIndex == -1) {
             cout << "Recipient not found." << endl;
             return;
@@ -916,8 +687,13 @@ void transferMoney(){
             cin >> ans;
         }
 
+        int senderCAIndex = getCheckingAccountIndex(customerList[senderIndex].getPhone(), customerList[senderIndex].getLname());
+        int senderSAIndex = getSavingAccountIndex(customerList[senderIndex].getPhone(), customerList[senderIndex].getLname());
+        int recipientCAIndex = getCheckingAccountIndex(customerList[recipientIndex].getPhone(), customerList[recipientIndex].getLname());
+        int recipientSAIndex = getSavingAccountIndex(customerList[recipientIndex].getPhone(), customerList[recipientIndex].getLname());
+            
         //Transfer from sender's checking account
-        if((ans == 'c' || ans == 'C') && checkingAccount[senderIndex].getID() != 0){ //idk if i have to keep all of these info
+        if((ans == 'c' || ans == 'C') && checkingAccount[senderCAIndex].getID() != 0){
             cout << "Enter amount to transfer: ";
             cin >> amount;
             while(cin.fail()){
@@ -927,15 +703,15 @@ void transferMoney(){
                 cout << "Enter a positive number for the amount to transfer: ";
                 cin >> ans;
             }
-            if(amount > 0 && amount <= checkingAccount[senderIndex].getBalance()){ //idk if i hae to check all of these
+            if(amount > 0 && amount <= checkingAccount[senderCAIndex].getBalance()){ //idk if i hae to check all of these
                 //Deposit to recipient's checking or saving account
-                if(checkingAccount[recipientIndex].getID() != 0){
-                    checkingAccount[senderIndex].WithdrawMoney(amount);
-                    checkingAccount[recipientIndex].DepositMoney(amount);
+                if(checkingAccount[recipientCAIndex].getID() != 0){
+                    checkingAccount[senderCAIndex].WithdrawMoney(amount);
+                    checkingAccount[recipientCAIndex].DepositMoney(amount);
                 }
-                else if(savingAccount[recipientIndex].getID() != 0) {
-                    checkingAccount[senderIndex].WithdrawMoney(amount);
-                    savingAccount[recipientIndex].DepositMoney(amount);
+                else if(savingAccount[recipientSAIndex].getID() != 0) {
+                    checkingAccount[senderCAIndex].WithdrawMoney(amount);
+                    savingAccount[recipientSAIndex].DepositMoney(amount);
                 }
                 else{
                     cout << "Recipient has no account to receive money!" << endl;
@@ -948,7 +724,7 @@ void transferMoney(){
             }
         }
         //Transfer from sender's saving account
-        else if((ans == 's' || ans == 'S') && savingAccount[senderIndex].getID() != 0){
+        else if((ans == 's' || ans == 'S') && savingAccount[senderSAIndex].getID() != 0){
             cout << "Enter amount to transfer: ";
             cin >> amount;
             while(cin.fail()){
@@ -958,15 +734,15 @@ void transferMoney(){
                 cout << "Enter a positive number for the amount to transfer: ";
                 cin >> ans;
             }
-            if(amount > 0 && amount <= savingAccount[senderIndex].getBalance()){
+            if(amount > 0 && amount <= savingAccount[senderSAIndex].getBalance()){
                 //Deposit to recipient's checking or saving account
-                if (checkingAccount[recipientIndex].getID() != 0){
-                    savingAccount[senderIndex].WithdrawMoney(amount);
-                    checkingAccount[recipientIndex].DepositMoney(amount);
+                if (checkingAccount[recipientCAIndex].getID() != 0){
+                    savingAccount[senderSAIndex].WithdrawMoney(amount);
+                    checkingAccount[recipientCAIndex].DepositMoney(amount);
                 }
-                else if(savingAccount[recipientIndex].getID() != 0){
-                    savingAccount[senderIndex].WithdrawMoney(amount);
-                    savingAccount[recipientIndex].DepositMoney(amount);
+                else if(savingAccount[recipientSAIndex].getID() != 0){
+                    savingAccount[senderSAIndex].WithdrawMoney(amount);
+                    savingAccount[recipientSAIndex].DepositMoney(amount);
                 }
                 else{
                     cout << "Recipient has no account to receive money!" << endl;
