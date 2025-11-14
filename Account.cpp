@@ -81,7 +81,8 @@ void Account::DepositMoney(const double & _amount){
         balance = balance + _amount;
         depositsCounter++;
         cout << fixed << setprecision(2); 
-        cout << "Deposit successful. New balance: $" << balance << endl;
+        cout << "Deposit successful." << endl;
+        cout << "New balance: $" << balance << endl;
     }
     else{
         cout << "Error! Deposit amount must be positive." << endl;
@@ -112,11 +113,12 @@ void Account::PrintInfo() const{
         accountCustomer2->PrintInfo();
     }
     if(ID != 0){
+        cout << endl;
         cout << fixed << setprecision(2); // ensure balance shows two decimals
-        cout << setw(15) << left << "Account ID: " << ID << endl;
-        cout << setw(15) << left << "Balance: " << balance << endl;
-        cout << setw(15) << left << "Withdrawals: " << withdrawalCounter << endl;
-        cout << setw(15) << left << "Deposits: " << depositsCounter << endl;
+        cout << setw(15) << left << "Account ID" << setw(30) << left << ID << endl;
+        cout << setw(15) << left << "Balance" << setw(30) << left << balance << endl;
+        cout << setw(15) << left << "Withdrawals" << setw(30) << left<< withdrawalCounter << endl;
+        cout << setw(15) << left << "Deposits" << setw(30) << left << depositsCounter << endl;
     }
 }
 

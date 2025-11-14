@@ -59,9 +59,13 @@ string Customer::getEmail() const {
 // Prints all customer information
 void Customer::PrintInfo() const {
     if(fName != ""){
-        cout << setw(15) << left << "Customer: " << fName << " " << lName << endl;
-        cout << setw(15) << left << "Address: " << address << endl;
-        cout << setw(15) << left << "Phone: " << phone << endl;
-        cout << setw(15) << left << "Email: " << email << endl;
+        cout << endl;
+        cout << "=============================================" << endl;
+        cout << setw(15) << left << "Field" << setw(30) << left << "Information" << endl;
+        cout << "---------------------------------------------" << endl;
+        cout << setw(15) << left << "Name" << fName << " " << lName << endl;
+        cout << setw(15) << left << "Phone" << setw(30) << left << phone << endl;
+        cout << setw(15) << left << "Email" << setw(30) << left << email << endl;
+        cout << setw(15) << left << "Address" << setw(30) << left << address << endl;
     }
 }
