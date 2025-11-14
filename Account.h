@@ -5,24 +5,27 @@
 
 class Account {
     int withdrawalCounter, depositsCounter;
-    Customer * accountCustomer;
+    Customer * accountCustomer1;
+    Customer * accountCustomer2;
 protected:
     int ID;
     double balance;
 public:
     Account();
-    Account(int, double, Customer *);
+    Account(int, double, Customer *, Customer *);
     
     void setID (int);
     void setBalance(double);
-    void setAccountCustomer(Customer *);
+    void setAccountCustomer1(Customer *);
+    void setAccountCustomer2(Customer *);
     void setWithdrawalCounter(int);
     void setDepositCounter(int);
-    void setAll(int, double, Customer *);
+    void setAll(int, double, Customer *, Customer *);
 
     int getID() const;
     double getBalance() const;
-    Customer * getAccountCustomer() const;
+    Customer * getAccountCustomer1() const;
+    Customer * getAccountCustomer2() const;
     int getWithdrawalCounter() const;
     int getDepositsCounter() const;
     

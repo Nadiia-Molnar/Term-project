@@ -1,13 +1,12 @@
 #include "SavingAccount.h"
 
 // Default constructor
-SavingAccount::SavingAccount():Account(0, 0.0, nullptr){
+SavingAccount::SavingAccount():Account(0, 0.0, nullptr, nullptr){
     interestRate = 0.0;
 }
 // Parameterized constructor
-SavingAccount::SavingAccount(int _id, double _balance, Customer * _accountCustomer, double _interestRate):Account(_id, _balance, _accountCustomer){
-    if (_interestRate > 0)
-        interestRate = _interestRate;
+SavingAccount::SavingAccount(int _id, double _balance, Customer * _accountCustomer1, Customer * _accountCustomer2, double _interestRate):Account(_id, _balance, _accountCustomer1, _accountCustomer2){
+    setInterestRate(_interestRate);
 }
 //Setter
 void SavingAccount::setInterestRate(double _interestRate){
@@ -15,8 +14,8 @@ void SavingAccount::setInterestRate(double _interestRate){
         interestRate = _interestRate;
 }
 // Set all attributes
-void SavingAccount::setAll(int _id, double _balance, Customer * _accountCustomer, double _interestRate){
-    Account::setAll(_id, _balance, _accountCustomer);
+void SavingAccount::setAll(int _id, double _balance, Customer * _accountCustomer1, Customer * _accountCustomer2, double _interestRate){
+    Account::setAll(_id, _balance, _accountCustomer1, _accountCustomer2);
     setInterestRate(_interestRate);
 }
 // Getter

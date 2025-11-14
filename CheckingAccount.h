@@ -7,10 +7,10 @@ class CheckingAccount:public Account{
     double overDraftLimit;
 public:
     CheckingAccount();
-    CheckingAccount(int, double, Customer *, double);
+    CheckingAccount(int, double, Customer *, Customer *, double);
     
     void setOverDraftLimit(double);
-    void setAll(int, double, Customer *, double);
+    void setAll(int, double, Customer *, Customer *, double);
     
     double getOverDraftLimit() const;
     

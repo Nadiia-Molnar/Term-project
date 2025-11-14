@@ -17,7 +17,7 @@ public:
     void setAddress(const string&);
     void setPhone (const string&);
     void setEmail(const string&);
-    void setAll(const string&, const string&, const string&, const string&, const string&);
+    void setAll(const string & _fName, const string & _lName, const string & _address, const string & _phone, const string & _email);
     
     string getFname() const;
     string getLname() const;

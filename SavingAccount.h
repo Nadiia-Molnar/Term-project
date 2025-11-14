@@ -7,10 +7,10 @@ class SavingAccount:public Account{
     double interestRate;
 public:
     SavingAccount();
-    SavingAccount(int, double, Customer *, double);
+    SavingAccount(int, double, Customer *, Customer *, double);
     
     void setInterestRate(double);
-    void setAll(int, double, Customer *, double);
+    void setAll(int, double, Customer *, Customer *, double);
     
     double getInterestRate() const;
     

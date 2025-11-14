@@ -1,11 +1,11 @@
 #include "CheckingAccount.h"
 
 // Default constructor
-CheckingAccount::CheckingAccount():Account(0, 0.0, nullptr){
+CheckingAccount::CheckingAccount():Account(0, 0.0, nullptr, nullptr){
     overDraftLimit = 0.0;
 }
 // Parameterized constructor
-CheckingAccount::CheckingAccount(int _id, double _balance, Customer * _accountCustomer, double _overDraftLimit):Account(_id, _balance, _accountCustomer){
+CheckingAccount::CheckingAccount(int _id, double _balance, Customer * _accountCustomer1, Customer * _accountCustomer2, double _overDraftLimit):Account(_id, _balance, _accountCustomer1, _accountCustomer2){
     setOverDraftLimit(_overDraftLimit);
 }
 // Setter
@@ -16,8 +16,8 @@ void CheckingAccount::setOverDraftLimit(double _overDraftLimit){
         overDraftLimit = 0.0;
 }
 // Set all attributes at once
-void CheckingAccount::setAll(int _id, double _balance, Customer * _accountCustomer, double _overDraftLimit){
-    Account::setAll(_id, _balance, _accountCustomer);
+void CheckingAccount::setAll(int _id, double _balance, Customer * _accountCustomer1, Customer * _accountCustomer2, double _overDraftLimit){
+    Account::setAll(_id, _balance, _accountCustomer1, _accountCustomer2);
     setOverDraftLimit(_overDraftLimit);
 }
 // Getter
