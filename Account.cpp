@@ -101,7 +101,8 @@ void Account::WithdrawMoney(const double & _amount) {
     else{
         balance = balance - _amount;
         withdrawalCounter++;
-        cout << "Withdrawal successful. New balance: " << balance << endl;
+        cout << "Withdrawal successful." << endl;
+        cout << "New balance: " << balance << endl;
     }
 }
 //Displays all account information
@@ -114,11 +115,13 @@ void Account::PrintInfo() const{
     }
     if(ID != 0){
         cout << endl;
+        cout << "Account information:" << endl;
+        cout << "---------------------------------------------" << endl;
         cout << fixed << setprecision(2); // ensure balance shows two decimals
-        cout << setw(15) << left << "Account ID" << setw(30) << left << ID << endl;
-        cout << setw(15) << left << "Balance" << setw(30) << left << balance << endl;
-        cout << setw(15) << left << "Withdrawals" << setw(30) << left<< withdrawalCounter << endl;
-        cout << setw(15) << left << "Deposits" << setw(30) << left << depositsCounter << endl;
+        cout << setw(20) << left << "Account ID" << setw(50) << left << ID << endl;
+        cout << setw(20) << left << "Balance" << setw(50) << left << balance << endl;
+        cout << setw(20) << left << "Withdrawals" << setw(50) << left<< withdrawalCounter << endl;
+        cout << setw(20) << left << "Deposits" << setw(50) << left << depositsCounter << endl;
     }
 }
 
