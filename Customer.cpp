@@ -61,11 +61,11 @@ void Customer::PrintInfo() const {
     if(fName != ""){
         cout << endl;
         cout << "=============================================" << endl;
-        cout << setw(15) << left << "Field" << setw(30) << left << "Information" << endl;
+        cout << setw(20) << left << "Field" << setw(50) << left << "Information" << endl;
         cout << "---------------------------------------------" << endl;
-        cout << setw(15) << left << "Name" << fName << " " << lName << endl;
-        cout << setw(15) << left << "Phone" << setw(30) << left << phone << endl;
-        cout << setw(15) << left << "Email" << setw(30) << left << email << endl;
-        cout << setw(15) << left << "Address" << setw(30) << left << address << endl;
+        cout << setw(20) << left << "Name" << fName << " " << lName << endl;
+        cout << setw(20) << left << "Phone" << setw(50) << left << phone << endl;
+        cout << setw(20) << left << "Email" << setw(50) << left << email << endl;
+        cout << setw(20) << left << "Address" << setw(50) << left << address << endl;
     }
 }
