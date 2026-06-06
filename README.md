@@ -1,0 +1,1 @@
+This project is a console-based Banking Management System developed in C++. The application allows users to manage customers and bank accounts through an interactive menu-driven interface. The system was designed using Object-Oriented Programming (OOP) principles, including inheritance, class collaboration, encapsulation, and arrays of objects.
